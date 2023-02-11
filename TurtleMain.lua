@@ -3,55 +3,37 @@ if not rednet.isOpen() then
     rednet.open("right")
 end
 --Get current turtle coordinates
-local function getCoords()
-    local f = fs.open("coords/x.loc", "r")
+local function getCoord(coord)
+    local f = fs.open("coords/"..coord..".loc", "r")
     local x = f.readAll()
     f.close()
-    local f = fs.open("coords/y.loc", "r")
-    local y = f.readAll()
-    f.close()
-    local f = fs.open("coords/z.loc", "r")
-    local z = f.readAll()
-    f.close()
-    local f = fs.open("coords/r.loc", "r")
-    local rot = f.readAll()
-    f.close()
-    return x,y,z,rot
+    return tonumber(coord)
 end
 --Update the coordinates of the turtle
-local function updateCoords(uX,uY,uZ,uR)
-    local f = fs.open("coords/x.loc", "w")
-    f.write(uX)
-    f.close()
-    local f = fs.open("coords/y.loc", "w")
-    f.write(uY)
-    f.close()
-    local f = fs.open("coords/z.loc", "w")
-    f.write(uZ)
-    f.close()
-    local f = fs.open("coords/r.loc", "w")
-    f.write(uR)
+local function updateCoord(coord, change)
+    local f = fs.open("coords/"..coord..".loc", "w")
+    f.write(change)
     f.close()
 end
 --Move the turtle one block forward
 local function walk()
-    local x,y,z,r = getCoords()
+    local x,y,z,r = getCoord("x"),getCoord("y"),getCoord("z"),getCoord("r")
     turtle.forward()
-    if tonumber(r) == 1 then
+    if r == 1 then
         updateCoords(x + 1, y, z, r)
-    elseif tonumber(r) == 2 then
+    elseif r == 2 then
         updateCoords(x, y, z + 1, r)
-    elseif tonumber(r) == 3 then
+    elseif r == 3 then
         updateCoords(x - 1, y, z, r)
-    elseif tonumber(r) == 4 then 
+    elseif r == 4 then 
         updateCoords(x, y, z - 1, r)
     end
 end
 --Rotate the turtle once
 local function rotate()
-    local x,y,z,r = getCoords()
+    local x,y,z,r = getCoord("x"),getCoord("y"),getCoord("z"),getCoord("r")
     turtle.turnRight()
-    if tonumber(r) < 4 then
+    if r < 4 then
         updateCoords(x, y, z, r + 1)
     else
         updateCoords(x, y, z, 1)
@@ -66,17 +48,17 @@ end
 --Goes to selected coordinates, X first then Z
 local function goTo(dX, dY, dZ)
     local x, y, z, r = getCoords()
-    if tonumber(x) < dX then
-        if tonumber(r) ~= 1 then
-            if tonumber(r) == 4 then
+    if x < dX then
+        if r ~= 1 then
+            if r == 4 then
                 rotate()
             else
                 repeat rotate() r = r+1 until r == 4 end
                 rotate()
         end
-    elseif tonumber(x) > dX then
-        if tonumber(r) ~= 3 then
-            if tonumber(r) == 4 then
+    elseif x > dX then
+        if r ~= 3 then
+            if r == 4 then
                 rotate()
                 r = 1
                 repeat rotate() r = r+1 until r == 3
@@ -85,7 +67,7 @@ local function goTo(dX, dY, dZ)
             end
         end
     end
-    repeat walk() xC = getCoords() until tonumber(xC) == dX
+    repeat walk() xC = getCoord("x") until Xc == dX
     
 end
 goTo(0,0,0)
