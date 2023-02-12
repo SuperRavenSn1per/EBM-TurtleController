@@ -5,9 +5,9 @@ end
 --Get current turtle coordinates
 local function getCoord(coord)
     local f = fs.open("coords/"..coord..".loc", "r")
-    local x = f.readAll()
+    local c = f.readAll()
     f.close()
-    return tonumber(coord)
+    return tonumber(c)
 end
 --Update the coordinates of the turtle
 local function updateCoord(coord, change)
@@ -36,7 +36,7 @@ local function rotate()
     if r < 4 then
         updateCoord("r", r + 1)
     else
-        updateCoords("r", 1)
+        updateCoord("r", 1)
     end
 end
 --Mine 3 blocks
@@ -48,15 +48,17 @@ end
 --Goes to selected coordinates, X first then Z
 local function goTo(dX, dY, dZ)
     local x, z, r = getCoord("x"), getCoord("z"), getCoord("r")
-    if x < dX then
-        if r ~= 1 then
-            repeat rotate() r = getCoord("r") until r == 1
+    if x ~= dX then
+        if x < dX then
+            if r ~= 1 then
+                repeat rotate() r = getCoord("r") until r == 1
+            end
+        elseif x > dX then
+            if r ~= 3 then
+                repeat rotate() r = getCoord("r") until r == 3
+            end
         end
-    elseif x > dX then
-        if r ~= 3 then
-            repeat rotate() r = getCoord("r") until r == 3
-        end
+        repeat walk() xC = getCoord("x") until xC == dX
     end
-    repeat walk() xC = getCoord("x") until Xc == dX
 end
 goTo(0,0,0)
