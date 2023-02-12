@@ -20,23 +20,23 @@ local function walk()
     local x,y,z,r = getCoord("x"),getCoord("y"),getCoord("z"),getCoord("r")
     turtle.forward()
     if r == 1 then
-        updateCoords(x + 1, y, z, r)
+        updateCoord("x", x + 1)
     elseif r == 2 then
-        updateCoords(x, y, z + 1, r)
+        updateCoord("z", z + 1)
     elseif r == 3 then
-        updateCoords(x - 1, y, z, r)
+        updateCoord("x", x - 1)
     elseif r == 4 then 
-        updateCoords(x, y, z - 1, r)
+        updateCoord("z", z - 1)
     end
 end
 --Rotate the turtle once
 local function rotate()
-    local x,y,z,r = getCoord("x"),getCoord("y"),getCoord("z"),getCoord("r")
+    local r = getCoord("r")
     turtle.turnRight()
     if r < 4 then
-        updateCoords(x, y, z, r + 1)
+        updateCoord("r", r + 1)
     else
-        updateCoords(x, y, z, 1)
+        updateCoords("r", 1)
     end
 end
 --Mine 3 blocks
