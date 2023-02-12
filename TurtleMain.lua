@@ -47,27 +47,16 @@ local function path()
 end
 --Goes to selected coordinates, X first then Z
 local function goTo(dX, dY, dZ)
-    local x, y, z, r = getCoords()
+    local x, z, r = getCoord("x"), getCoord("z"), getCoord("r")
     if x < dX then
         if r ~= 1 then
-            if r == 4 then
-                rotate()
-            else
-                repeat rotate() r = r+1 until r == 4 end
-                rotate()
+            repeat rotate() r = getCoord("r") until r == 1
         end
     elseif x > dX then
         if r ~= 3 then
-            if r == 4 then
-                rotate()
-                r = 1
-                repeat rotate() r = r+1 until r == 3
-            else
-                repeat rotate() r = r+1 until r == 3 
-            end
+            repeat rotate() r = getCoord("r") until r == 3
         end
     end
     repeat walk() xC = getCoord("x") until Xc == dX
-    
 end
 goTo(0,0,0)
