@@ -60,5 +60,17 @@ local function goTo(dX, dY, dZ)
         end
         repeat walk() xC = getCoord("x") until xC == dX
     end
+    if z ~= dZ then
+        if x < dZ then
+            if r ~= 2 then
+                repeat rotate() r = getCoord("r") until r == 2
+            end
+        elseif z > dZ then
+            if r ~= 4 then
+                repeat rotate() r = getCoord("r") until r == 4
+            end
+        end
+        repeat walk() zC = getCoord("z") until zC == dZ
+    end
 end
 goTo(0,0,0)
